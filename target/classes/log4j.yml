@@ -1,0 +1,70 @@
+Configuration:
+  Properties:
+    Property:
+      name: logger
+      value: logs_folder
+
+  Appenders:
+
+    Console:
+      - name: myConsole
+        PatternLayout:
+          Pattern: "%highlight{%level}{FATAL=bg_red} d%{yyyy-MM-dd HH:mm:ss} %class{1}:%L %msg%n"
+          Filter:
+            ThresholdFilter:
+            level: error
+            onMatch: DENY
+            onMismatch: NEUTRAL
+
+
+
+    File:
+      - name: myFile
+        fileName: ${logger}/log_file.log
+          PatternLayout:
+           Pattern: "%level d%{yyyy-MM-dd HH:mm:ss} %class{1}:%L %msg%n"
+           Filter:
+            ThresholdFilter:
+            level: warn
+            onMatch: DENY
+            onMismatch: NEUTRAL
+      - name: myFile2
+        fileName: ${logger}/log_file2.log
+          PatternLayout:
+           Pattern: "%level d%{yyyy-MM-dd HH:mm:ss} %class{1}:%L %msg%n"
+           Filter:
+            ThresholdFilter:
+            level: warn
+            onMatch: DENY
+            onMismatch: NEUTRAL
+
+    RollingFile:
+      - name: myRollingFile
+        fileName: ${logger}/rolling_file.log
+          filePattern: ${logger}rollingFile.log
+           PatternLayout:
+            Pattern: "[%level] %d{yyyy-MM-dd HH:mm:ss.SSS} %class{1}:%L - %msg %xEx{short}%n"
+             Policies:
+             TimeBasedTriggeringPolicy:
+              interval: 1
+              modulate: true
+
+
+
+      Loggers:
+        Root:
+          level: all
+          AppenderRef:
+            - ref: myFile
+              level: info
+            - ref: myConsole
+              level: warn
+          Logger:
+           -
+            name:
+              level: all
+              additivity: true
+              AppenderRef:
+                -
+                  ref: MyFile
+                  level: all
